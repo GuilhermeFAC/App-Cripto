@@ -2,6 +2,7 @@
 
 import 'package:criptocoin/models/moeda.dart';
 import 'package:criptocoin/repositories/moeda_repository.dart';
+import 'package:criptocoin/views/moedas_detalhes__page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -79,6 +80,14 @@ class _MoedasPageState extends State<MoedasPage> with TickerProviderStateMixin {
     }
   }
 
+  //Função para mostrar detalhes de uma moeda ao fazer o onTap
+  mostrarDetalhes(Moeda moeda) {
+    Navigator.push(
+      context, MaterialPageRoute(
+      builder: (_) => MoedasDetalhesPage(moeda: moeda))
+    );
+  }
+
   // Build Principal App.
   @override
   Widget build(BuildContext context) {
@@ -95,7 +104,8 @@ class _MoedasPageState extends State<MoedasPage> with TickerProviderStateMixin {
             if (scroll.direction == ScrollDirection.reverse && showFAB) {
               _controller.reverse();
               showFAB = false;
-            }else if(scroll.direction == ScrollDirection.forward && !showFAB) {
+            } else if (scroll.direction == ScrollDirection.forward &&
+                !showFAB) {
               _controller.forward();
               showFAB = true;
             }
@@ -130,6 +140,7 @@ class _MoedasPageState extends State<MoedasPage> with TickerProviderStateMixin {
                           : selecionadas.add(tabela[moeda]);
                     });
                   },
+                  onTap: () => mostrarDetalhes(tabela[moeda]),
                 );
               },
               padding: EdgeInsets.all(16),
@@ -137,6 +148,8 @@ class _MoedasPageState extends State<MoedasPage> with TickerProviderStateMixin {
               itemCount: tabela.length),
         ),
       ),
+
+      //Botão de favoritar.
       floatingActionButton: selecionadas.isNotEmpty
           ? ScaleTransition(
               scale: _animation,

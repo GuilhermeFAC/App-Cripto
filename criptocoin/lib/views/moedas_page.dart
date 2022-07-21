@@ -82,10 +82,8 @@ class _MoedasPageState extends State<MoedasPage> with TickerProviderStateMixin {
 
   //Função para mostrar detalhes de uma moeda ao fazer o onTap
   mostrarDetalhes(Moeda moeda) {
-    Navigator.push(
-      context, MaterialPageRoute(
-      builder: (_) => MoedasDetalhesPage(moeda: moeda))
-    );
+    Navigator.push(context,
+        MaterialPageRoute(builder: (_) => MoedasDetalhesPage(moeda: moeda)));
   }
 
   // Build Principal App.

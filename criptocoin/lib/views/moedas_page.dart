@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:criptocoin/models/moeda.dart';
+import 'package:criptocoin/repositories/favoritas_repository.dart';
 import 'package:criptocoin/repositories/moeda_repository.dart';
 import 'package:criptocoin/views/moedas_detalhes__page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class MoedasPage extends StatefulWidget {
   MoedasPage({Key? key}) : super(key: key);
@@ -22,6 +24,8 @@ class _MoedasPageState extends State<MoedasPage> with TickerProviderStateMixin {
 
   //Lista de moedas selecionadas na lista do App.
   List<Moeda> selecionadas = [];
+
+  late FavoritasRepository favoritas;
 
   // Função AppBar dinamico com seleção e sem seleção da lista.
   appBarDinamica() {
@@ -53,15 +57,28 @@ class _MoedasPageState extends State<MoedasPage> with TickerProviderStateMixin {
     }
   }
 
-  //Função para mostrar detalhes de uma moeda ao fazer o onTap
+  //Função para mostrar detalhes de uma moeda ao fazer o onTap.
   mostrarDetalhes(Moeda moeda) {
     Navigator.push(context,
         MaterialPageRoute(builder: (_) => MoedasDetalhesPage(moeda: moeda)));
   }
 
+  //Limpar lista selecionadas.
+  limparSelecionadas() {
+    setState(() {
+      selecionadas = [];
+    });
+  }
+
   // Build Principal App.
   @override
   Widget build(BuildContext context) {
+    //Metodo 1 para chamar favoritas.
+    //favoritas = Provider.of<FavoritasRepository>(context);
+
+    //Metodo 2 para chamar favoritas.
+    favoritas = context.watch<FavoritasRepository>();
+
     return Scaffold(
       appBar: appBarDinamica(),
       body: ListView.separated(
@@ -75,12 +92,25 @@ class _MoedasPageState extends State<MoedasPage> with TickerProviderStateMixin {
                       width: 40,
                       child: Image.asset(tabela[moeda].icone),
                     ),
-              title: Text(
-                tabela[moeda].nome,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500,
-                ),
+              title: Row(
+                children: [
+                  Text(
+                    tabela[moeda].nome,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  if (favoritas.lista.contains(tabela[moeda]))
+                    SizedBox(
+                      width: 20,
+                      child: Icon(
+                        Icons.favorite,
+                        color: Colors.black,
+                        size: 15,
+                      ),
+                    ),
+                ],
               ),
               trailing: Text(real.format(tabela[moeda].preco)),
               selected: selecionadas.contains(tabela[moeda]),
@@ -99,10 +129,14 @@ class _MoedasPageState extends State<MoedasPage> with TickerProviderStateMixin {
           padding: EdgeInsets.all(16),
           separatorBuilder: (_, __) => Divider(),
           itemCount: tabela.length),
+
       //Botão de favoritar.
       floatingActionButton: selecionadas.isNotEmpty
           ? FloatingActionButton.extended(
-              onPressed: () {},
+              onPressed: () {
+                favoritas.salveAll(selecionadas);
+                limparSelecionadas();
+              },
               label: Text(
                 'FAVORITAR',
                 style: TextStyle(

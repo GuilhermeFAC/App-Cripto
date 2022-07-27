@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:criptocoin/models/moeda.dart';
 import 'package:criptocoin/repositories/favoritas_repository.dart';
 import 'package:criptocoin/repositories/moeda_repository.dart';
@@ -15,12 +14,12 @@ class MoedasPage extends StatefulWidget {
   State<MoedasPage> createState() => _MoedasPageState();
 }
 
-class _MoedasPageState extends State<MoedasPage> with TickerProviderStateMixin {
+class _MoedasPageState extends State<MoedasPage> {
   //Importando classe de moedas.
   final tabela = MoedaRepository.tabela;
 
   //Biblioteca de conversão de formato de moedas.
-  NumberFormat real = NumberFormat.currency(locale: 'pt_BR', name: 'R\$');
+  NumberFormat real = NumberFormat.currency(locale: 'pt-BR', name: 'R\$');
 
   //Lista de moedas selecionadas na lista do App.
   List<Moeda> selecionadas = [];

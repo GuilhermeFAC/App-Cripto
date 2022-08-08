@@ -16,7 +16,9 @@ class MoedasPage extends StatefulWidget {
 
 class _MoedasPageState extends State<MoedasPage> {
   //Importando classe de moedas.
-  final tabela = MoedaRepository.tabela;
+  late List<Moeda> tabela;
+
+  late MoedaRepository moedas;
 
   //Biblioteca de conversão de formato de moedas.
   NumberFormat real = NumberFormat.currency(locale: 'pt-BR', name: 'R\$');
@@ -78,6 +80,10 @@ class _MoedasPageState extends State<MoedasPage> {
     //Metodo 2 para chamar favoritas.
     favoritas = context.watch<FavoritasRepository>();
 
+    moedas = context.watch<MoedaRepository>();
+
+    tabela = moedas.tabela;
+
     return Scaffold(
       appBar: appBarDinamica(),
       body: ListView.separated(
@@ -89,7 +95,7 @@ class _MoedasPageState extends State<MoedasPage> {
                   ? CircleAvatar(child: Icon(Icons.check))
                   : SizedBox(
                       width: 40,
-                      child: Image.asset(tabela[moeda].icone),
+                      child: Image.network(tabela[moeda].icone),
                     ),
               title: Row(
                 children: [

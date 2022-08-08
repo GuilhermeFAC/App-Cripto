@@ -1,4 +1,5 @@
 import 'package:criptocoin/repositories/favoritas_repository.dart';
+import 'package:criptocoin/repositories/moeda_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'configs/hive_config.dart';
@@ -10,7 +11,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => FavoritasRepository())
+        ChangeNotifierProvider(create: (context) => FavoritasRepository()),
+        ChangeNotifierProvider(create: (context) => MoedaRepository())
       ],
       child: MeuAplicativo(),
     ),
